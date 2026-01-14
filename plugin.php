@@ -136,7 +136,7 @@ function loopis_faq_cleanup() {
         wp_delete_post($faq->ID, true); // permanent delete
     }*/
     
-    //  Fetch and delete all categories in faq_kategori taxonomy - categories that are not added in the "default categories function" will be lost
+    //  Fetch and delete all categories in faq_kategori taxonomy - categories that are not included in the "default categories function" will be lost
     $categories = get_terms([
         'taxonomy'   => 'faq_category',
         'hide_empty' => false,
@@ -147,7 +147,7 @@ function loopis_faq_cleanup() {
         }
     }
 
-    // Fetch and delete all tags in faq_tag taxonomy - tags that are not added in "default categories" will be lost
+    // Fetch and delete all tags in faq_tag taxonomy - tags that are not included in the "default tags function" will be lost
     $tags = get_terms([
         'taxonomy'   => 'faq_tag',
         'hide_empty' => false,
