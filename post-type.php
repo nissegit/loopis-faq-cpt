@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Name: loopis_faq faq_collection_cpt - cpt custom post types
 
-function loopis_faq_faq_collection_cpt() {
+function loopis_faq_create_faq_cpt() {
 
     register_post_type( 'faq', [
     
@@ -87,6 +87,6 @@ function loopis_faq_faq_collection_cpt() {
 
 // Add the action
 
-add_action( 'init', 'loopis_faq_faq_collection_cpt' );
+add_action( 'init', 'loopis_faq_create_faq_cpt' );
 
 ?>

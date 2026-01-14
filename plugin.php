@@ -17,21 +17,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Load custom hierarcical category taxonomy
 
-require_once plugin_dir_path( __FILE__ ) . 'taxonomy.php';
+require_once plugin_dir_path( __FILE__ ) . 'category.php';
 
 // Function to add default terms at the right time (before register_activation_hook)
 function loopis_faq_create_default_genres() {
 
     // Make sure taxonomy is registered before terms are created (not relying on add_action('init', ...))
-    loopis_faq_faqs_register_taxonomy();
+    loopis_faq_create_category_taxonomy();
 
     // What terms that should be default in a new install
     $default_terms = [ 'Instruktioner', 'Medlemskap', 'LOOPIS.app', 'LOOPIS skåp', 'Om föreningen' ];
 
     // Add terms, as long as they don't already exists
     foreach ( $default_terms as $term ) {
-        if (!term_exists($term, 'faq_kategorier')) {
-            wp_insert_term($term, 'faq_kategorier');
+        if (!term_exists($term, 'faq_category')) {
+            wp_insert_term($term, 'faq_category');
         }
     }
 
@@ -44,14 +44,14 @@ register_activation_hook(__FILE__, 'loopis_faq_create_default_genres');
 
 // Load custom nonhierarchical tags taxonomy 
 
-require_once plugin_dir_path( __FILE__ ) . 'tags.php';
+require_once plugin_dir_path( __FILE__ ) . 'tag.php';
 
 // Create default tags - use auto-complete in post editor for suggestions
 
 function loopis_faq_create_default_faq_tags() {
 
     // Function to add default tags at the right time (before register_activation_hook)
-    loopis_faq_register_tags();
+    loopis_faq_create_tag_taxonomy();
 
     $taxonomy = 'faq_tag';
 
@@ -73,7 +73,7 @@ function loopis_faq_create_default_faq_tags() {
             $tag_name,
             $taxonomy,
             [
-                'slug' => sanitize_title( $tag_name ),
+                'slug' => $tag_name,
             ]
         );
     }
@@ -120,5 +120,48 @@ function loopis_faq_import_page() {
 	</div>			
 <?php
 }
+
+// Clean up function for deactivation
+
+function loopis_faq_cleanup() {
+
+    // Careful: this will delete all FAQ posts, do not use/uncomment unless you have backup of the FAQ posts
+    /*$faqs = get_posts([
+        'post_type' => 'faq',
+        'numberposts' => -1,
+        'post_status' => 'any',
+    ]);
+
+    foreach ($faqs as $faq) {
+        wp_delete_post($faq->ID, true); // permanent delete
+    }*/
+    
+    //  Fetch and delete all categories in faq_kategori taxonomy - categories that are not added in the "default categories function" will be lost
+    $categories = get_terms([
+        'taxonomy'   => 'faq_category',
+        'hide_empty' => false,
+    ]);
+    if (!is_wp_error($categories)) {
+        foreach ($categories as $cat) {
+            wp_delete_term($cat->term_id, 'faq_category');
+        }
+    }
+
+    // Fetch and delete all tags in faq_tag taxonomy - tags that are not added in "default categories" will be lost
+    $tags = get_terms([
+        'taxonomy'   => 'faq_tag',
+        'hide_empty' => false,
+    ]);
+    if (!is_wp_error($tags)) {
+        foreach ($tags as $tag) {
+            wp_delete_term($tag->term_id, 'faq_tag');
+        }
+    }
+}
+
+// Register the cleanup function
+
+register_deactivation_hook(__FILE__, 'loopis_faq_cleanup');
+
 
 ?>

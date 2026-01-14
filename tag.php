@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-add_action( 'init', 'loopis_faq_register_tags' );
+add_action( 'init', 'loopis_faq_create_tag_taxonomy' );
 
-function loopis_faq_register_tags() {
+function loopis_faq_create_tag_taxonomy() {
 
     register_taxonomy('faq_tag', 'faq', [
         'label'             => 'FAQ-taggar',

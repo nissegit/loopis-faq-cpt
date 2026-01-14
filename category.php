@@ -1,7 +1,7 @@
 <?php
 
 /**
- * taxonomy.php - creates and register a custom taxonomiy for the custom post types for the FAQ
+ * taxonomy.php - creates and register a custom category taxonomy for the custom post types for the FAQ
  */
 
 // No direct access
@@ -10,11 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Function to register the taxonomy
+// Function to register the category taxonomy
 
-function loopis_faq_faqs_register_taxonomy() {
+function loopis_faq_create_category_taxonomy() {
 
-    register_taxonomy( 'faq_kategorier', 'faq', [
+    register_taxonomy( 'faq_category', 'faq', [
 
         // Taxonomy arguments
         'public'            => true,
@@ -24,11 +24,11 @@ function loopis_faq_faqs_register_taxonomy() {
         'show_tagcloud'     => true,
         'show_admin_column' => true,
         'hierarchical'      => true,
-        'query_var'         => 'faq-kategorier',
+        'query_var'         => 'faq-kategori',
 
         // Rewrite handles the URL structure
         'rewrite'   => [
-            'slug'          => 'faq-kategorier', // Get specific category t.ex. /faq-kategorier/instruktioner
+            'slug'          => 'faq-kategori', // Get specific category t.ex. /faq-kategori/instruktioner
             'with_front'    => true,
             'hierarchical'   => true,
             'ep_mask'       => EP_NONE
@@ -58,7 +58,7 @@ function loopis_faq_faqs_register_taxonomy() {
 
 }
 
-// Load taxonomies early before CPT
-add_action( 'init', 'loopis_faq_faqs_register_taxonomy', 0 );
+// Load category taxonomy early before CPT
+add_action( 'init', 'loopis_faq_create_category_taxonomy', 0 );
 
 ?>
