@@ -22,5 +22,6 @@ custom tags, nonhierarchical tags: faq_tag (slug: faq-tag)
 **Redirects:** 
 
 **"MVP templates":** archive-faq.php, single-faq.php
+In theme-folder for templates: add two template files: cp page-faq.php archive-faq.php, cp page.php single-faq.php
 
 After installation of plugin: Flush permalinks: Settings - Permalinks - Save Changes 
